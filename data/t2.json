@@ -14,7 +14,7 @@
     "prefix": "77.105.168.0/22"
   },
   "measurement": {
-    "date": "2026-09-25",
+    "date": "2026-09-26",
     "status": "PARTIAL"
   },
   "identity": {
@@ -49,16 +49,18 @@
         "ip": "192.168.157.123",
         "rtt_ms": [
           4,
-          4,
-          5
+          3,
+          3
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 2,
@@ -67,142 +69,160 @@
         "status": "TIMEOUT",
         "scope": null,
         "asn": null,
+        "origin_asn": null,
         "asns": [],
         "prefix": null,
         "network_status": "NOT_OBSERVED",
-        "network_source": null
+        "network_source": null,
+        "network_error": null
       },
       {
         "hop": 3,
         "ip": "10.226.142.66",
         "rtt_ms": [
-          25,
-          34,
-          24
+          31,
+          27,
+          33
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 4,
         "ip": "10.163.123.75",
         "rtt_ms": [
+          42,
           29,
-          30,
-          39
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 5,
         "ip": "10.163.123.70",
         "rtt_ms": [
-          33,
-          25,
-          29
+          30,
+          34,
+          23
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 6,
         "ip": "10.163.122.181",
         "rtt_ms": [
-          26,
-          29,
-          24
+          35,
+          23,
+          35
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 7,
         "ip": "10.153.254.114",
         "rtt_ms": [
-          29,
-          29,
-          24
+          28,
+          27,
+          35
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
-        "prefix": null,
+        "prefix": "",
         "network_status": "NOT_PUBLIC",
-        "network_source": "local-address-classification"
+        "network_source": "local-address-classification",
+        "network_error": ""
       },
       {
         "hop": 8,
         "ip": "109.239.137.217",
         "rtt_ms": [
-          42,
-          34,
-          44
+          39,
+          41,
+          37
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
-        "asn": null,
+        "asn": "",
+        "origin_asn": "",
         "asns": [],
         "prefix": "",
         "network_status": "NOT_FOUND",
-        "network_source": "RIPEstat network-info"
+        "network_source": "RIPEstat prefix-overview",
+        "network_error": ""
       },
       {
         "hop": 9,
         "ip": "92.53.94.99",
         "rtt_ms": [
-          45,
-          39,
-          34
+          36,
+          34,
+          44
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
         "asn": "AS50340",
+        "origin_asn": "AS50340",
         "asns": [
           "AS50340"
         ],
         "prefix": "92.53.94.0/24",
         "network_status": "FOUND",
-        "network_source": "RIPEstat network-info"
+        "network_source": "RIPEstat network-info",
+        "network_error": ""
       },
       {
         "hop": 10,
         "ip": "77.105.169.6",
         "rtt_ms": [
-          40,
+          35,
           39,
-          38
+          39
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
         "asn": "AS50340",
+        "origin_asn": "AS50340",
         "asns": [
           "AS50340"
         ],
         "prefix": "77.105.168.0/22",
         "network_status": "FOUND",
-        "network_source": "RIPEstat network-info"
+        "network_source": "RIPEstat network-info",
+        "network_error": ""
       }
     ],
     "status": "CONFIRMED"
