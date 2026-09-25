@@ -26,7 +26,7 @@ function Get-ObjectValues {
 function Convert-AsPath {
   param($Path)
   if($null -eq $Path){return @()}
-  if($Path -is [string]){return @($Path -split 's+' | Where-Object {$_})}
+  if($Path -is [string]){return @($Path -split '\s+' | Where-Object {$_})}
   return @($Path | ForEach-Object {[string]$_})
 }
 
@@ -133,7 +133,8 @@ function Get-RisPeeringsPaths {
   }
   return @($out)
 }
-`r`n$c=Get-Config $Operator
+
+$c=Get-Config $Operator
 $sourceAsn=$c.Operator.asn
 $targetAsn=$c.Project.target.asn
 $targetPrefix=$c.Project.target.prefix
@@ -142,9 +143,13 @@ $targetIp=$c.Project.target.ip
 $lg=Invoke-RipeStat "looking-glass" $targetPrefix
 $state=Invoke-RipeStat "bgp-state" $targetPrefix
 $sourceNeighbours=Invoke-RipeStat "asn-neighbours" $sourceAsn @{lod=1}
-$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn @{lod=1}`r`n$risPeerings=Invoke-RipeStat "ris-peerings" $targetPrefix
+$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn @{lod=1}
+$risPeerings=Invoke-RipeStat "ris-peerings" $targetPrefix
 
-$lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}`r`n$risPaths=if($risPeerings.success){Get-RisPeeringsPaths $risPeerings.data $sourceAsn $targetAsn}else{@()}`r`n$risDirectPeerings=@($risPaths | Where-Object {([int]$_.peer_asn -eq [int]($sourceAsn -replace "^AS",""))})`r`n$risPathDirect=@($risPaths | Where-Object {$_.direct_adjacency})
+$lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}
+$risPaths=if($risPeerings.success){Get-RisPeeringsPaths $risPeerings.data $sourceAsn $targetAsn}else{@()}
+$risDirectPeerings=@($risPaths | Where-Object {([int]$_.peer_asn -eq [int]($sourceAsn -replace "^AS",""))})
+$risPathDirect=@($risPaths | Where-Object {$_.direct_adjacency})
 
 $statePaths=@()
 if($state.success){
@@ -194,7 +199,16 @@ $anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $ta
     target=$sourceMatch
     error=$sourceNeighbours.error
   }
-  ris_peerings=[pscustomobject]@{`r`n    success=$risPeerings.success`r`n    uri=$risPeerings.uri`r`n    route_count=$risPaths.Count`r`n    source_peer_route_count=$risDirectPeerings.Count`r`n    direct_path_count=$risPathDirect.Count`r`n    paths=$risPaths`r`n    error=$risPeerings.error`r`n  }`r`n  target_neighbours=[pscustomobject]@{
+  ris_peerings=[pscustomobject]@{
+    success=$risPeerings.success
+    uri=$risPeerings.uri
+    route_count=$risPaths.Count
+    source_peer_route_count=$risDirectPeerings.Count
+    direct_path_count=$risPathDirect.Count
+    paths=$risPaths
+    error=$risPeerings.error
+  }
+  target_neighbours=[pscustomobject]@{
     success=$targetNeighbours.success
     uri=$targetNeighbours.uri
     source=$targetMatch
