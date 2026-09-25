@@ -248,8 +248,8 @@
         "hop": 3,
         "ip": "10.226.142.66",
         "rtt_ms": [
-          23,
-          28,
+          29,
+          29,
           29
         ],
         "status": "REPLIED",
@@ -266,9 +266,9 @@
         "hop": 4,
         "ip": "10.163.123.75",
         "rtt_ms": [
-          28,
+          22,
           29,
-          29
+          44
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -284,9 +284,9 @@
         "hop": 5,
         "ip": "10.163.123.70",
         "rtt_ms": [
-          43,
-          42,
-          79
+          27,
+          28,
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -302,9 +302,9 @@
         "hop": 6,
         "ip": "10.163.122.181",
         "rtt_ms": [
-          32,
-          33,
-          35
+          29,
+          39,
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -320,9 +320,9 @@
         "hop": 7,
         "ip": "10.153.254.114",
         "rtt_ms": [
-          35,
-          28,
-          24
+          25,
+          29,
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -338,8 +338,8 @@
         "hop": 8,
         "ip": "109.239.137.217",
         "rtt_ms": [
-          38,
-          40,
+          46,
+          61,
           49
         ],
         "status": "REPLIED",
@@ -356,9 +356,9 @@
         "hop": 9,
         "ip": "92.53.94.99",
         "rtt_ms": [
-          57,
-          41,
-          46
+          54,
+          38,
+          42
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -376,9 +376,9 @@
         "hop": 10,
         "ip": "77.105.169.6",
         "rtt_ms": [
-          41,
-          37,
-          40
+          42,
+          48,
+          39
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -426,20 +426,27 @@
     "status": "NOT_PROVEN"
   },
   "ix": {
-    "direct_peer_proven": null,
-    "specific_ix_path_proven": null,
-    "internet_transit": null,
-    "status": "NOT_PROVEN",
-    "note": "Public measurements do not prove a physical IX, direct peer, or Internet transit path."
+    "direct_peer_proven": true,
+    "specific_ix_path_proven": false,
+    "internet_transit": false,
+    "matched_ix": [],
+    "third_party_asns": [],
+    "target_hops": [
+      9,
+      10
+    ],
+    "peeringdb_common_ix_count": 2,
+    "status": "CONFIRMED",
+    "note": "Cross-references traceroute hop ASNs and PeeringDB common-IX interconnect IPs against the configured source/target ASN. A public hop resolving to a third-party ASN is evidence the path used transit rather than direct peering; a hop IP matching a PeeringDB common_ix entry is stronger, specific evidence of the exact interconnect used. This is still control/data-plane evidence gathered from one measurement host at one point in time: it does not account for MPLS-hidden hops, ICMP rate-limiting, asymmetric return paths, or IX peerings whose interfaces do not respond to traceroute."
   },
   "result": {
     "ip_connectivity": true,
     "application_connectivity": false,
     "bgp_reachability": true,
     "mpls_observed": null,
-    "direct_physical_interconnect": null,
-    "specific_ix_path": null,
-    "internet_transit": null,
+    "direct_physical_interconnect": true,
+    "specific_ix_path": false,
+    "internet_transit": false,
     "exact_physical_path": null
   },
   "evidence": [
