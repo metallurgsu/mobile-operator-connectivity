@@ -2,7 +2,7 @@
   "operators":[
     {"name":"MTS","short_name":"MTS","file":"mts.json","tested_ip":"","asn":"","prefix":""},
     {"name":"MegaFon","short_name":"MegaFon","file":"megafon.json","tested_ip":"","asn":"","prefix":""},
-    {"name":"T2","short_name":"T2","file":"t2.json","tested_ip":"178.157.136.79","asn":"AS15378","prefix":"178.157.128.0/18"},
+    {"name":"T2","short_name":"T2","file":"t2.json","tested_ip":"","asn":"AS15378","prefix":"178.157.128.0/18"},
     {"name":"Beeline","short_name":"Beeline","file":"beeline.json","tested_ip":"","asn":"","prefix":""},
     {"name":"Yota","short_name":"Yota","file":"yota.json","tested_ip":"","asn":"","prefix":""}
   ]
