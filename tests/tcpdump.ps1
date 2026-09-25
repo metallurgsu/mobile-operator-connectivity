@@ -1,0 +1,2 @@
+param([Parameter(Mandatory)][string]$Operator)
+[pscustomobject]@{available=$false;tcp_handshake=$null;http_exchange=$null;connection_close=$null;status="NOT_TESTED";note="Requires packet capture on the measurement host or authorized remote host."}
