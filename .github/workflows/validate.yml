@@ -1,0 +1,20 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-powershell@v2
+      - name: Validate JSON
+        shell: pwsh
+        run: |
+          Get-ChildItem data/*.json | ForEach-Object { Get-Content $_ -Raw | ConvertFrom-Json | Out-Null }
+          Get-Content config/project.json -Raw | ConvertFrom-Json | Out-Null
+          Get-Content config/operators.json -Raw | ConvertFrom-Json | Out-Null
+          Get-Content schema/data.schema.json -Raw | ConvertFrom-Json | Out-Null
