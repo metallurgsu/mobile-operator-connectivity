@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "operator": {
+    "name": "MTS",
+    "short_name": "MTS",
+    "tested_ip": "",
+    "asn": "",
+    "prefix": ""
+  },
+  "measurement_target": {
+    "name": "Selectel VPS",
+    "ip": "77.105.169.6",
+    "asn": "AS50340",
+    "prefix": "77.105.168.0/22"
+  },
+  "measurement": {
+    "date": "",
+    "status": "NOT_TESTED"
+  },
+  "identity": {},
+  "whois": {},
+  "bgp": {},
+  "routing": {},
+  "traceroute": {},
+  "connectivity": {},
+  "tcpdump": {},
+  "security": {},
+  "ix": {},
+  "result": {
+    "ip_connectivity": null,
+    "application_connectivity": null,
+    "bgp_reachability": null,
+    "mpls_observed": null,
+    "direct_physical_interconnect": null,
+    "specific_ix_path": null,
+    "internet_transit": null,
+    "exact_physical_path": null
+  },
+  "evidence": []
+}
