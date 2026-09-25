@@ -68,6 +68,47 @@
     "status": "LOOKUP_OK",
     "note": "Uses the documented bgp.tools WHOIS service; no HTML scraping. Direct adjacency and AS_PATH require a supported BGP API/feed."
   },
+  "ripestat": {
+    "source": "RIPEstat",
+    "source_asn": "AS15378",
+    "target_asn": "AS50340",
+    "target_ip": "77.105.169.6",
+    "target_prefix": "77.105.168.0/22",
+    "looking_glass": {
+      "success": true,
+      "uri": "https://stat.ripe.net/data/looking-glass/data.json?resource=77.105.168.0%2F22&lod=1",
+      "route_count": 0,
+      "paths": [],
+      "error": null
+    },
+    "source_neighbours": {
+      "success": true,
+      "uri": "https://stat.ripe.net/data/asn-neighbours/data.json?resource=AS15378&lod=1",
+      "target": {
+        "found": false,
+        "asn": 50340,
+        "type": null,
+        "power": null
+      },
+      "error": null
+    },
+    "target_neighbours": {
+      "success": true,
+      "uri": "https://stat.ripe.net/data/asn-neighbours/data.json?resource=AS50340&lod=1",
+      "source": {
+        "found": false,
+        "asn": 15378,
+        "type": null,
+        "power": null
+      },
+      "error": null
+    },
+    "direct_as_adjacency": false,
+    "path_observation_count": 0,
+    "direct_path_observation_count": 0,
+    "status": "LOOKUP_OK",
+    "note": "RIPEstat provides BGP control-plane observations from RIPE RIS. AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
+  },
   "peeringdb": {
     "source": "PeeringDB",
     "source_asn": "AS15378",
@@ -123,18 +164,18 @@
         "ip": "192.168.157.123",
         "rtt_ms": [
           6,
-          4,
-          3
+          3,
+          5
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 2,
@@ -154,117 +195,117 @@
         "hop": 3,
         "ip": "10.226.142.66",
         "rtt_ms": [
-          29,
-          25,
-          30
+          32,
+          34,
+          28
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 4,
         "ip": "10.163.123.75",
         "rtt_ms": [
-          28,
-          28,
-          20
+          24,
+          25,
+          23
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 5,
         "ip": "10.163.123.70",
         "rtt_ms": [
-          27,
+          30,
           29,
-          20
+          31
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 6,
         "ip": "10.163.122.181",
         "rtt_ms": [
-          32,
-          34,
-          23
+          36,
+          29,
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 7,
         "ip": "10.153.254.114",
         "rtt_ms": [
-          31,
+          28,
           30,
-          23
+          27
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
-        "prefix": "",
+        "prefix": null,
         "network_status": "NOT_PUBLIC",
         "network_source": "local-address-classification",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 8,
         "ip": "109.239.137.217",
         "rtt_ms": [
-          34,
-          39,
-          31
+          37,
+          42,
+          44
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
-        "asn": "",
-        "origin_asn": "",
+        "asn": null,
+        "origin_asn": null,
         "asns": [],
         "prefix": "",
         "network_status": "NOT_FOUND",
         "network_source": "RIPEstat prefix-overview",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 9,
         "ip": "92.53.94.99",
         "rtt_ms": [
-          36,
-          34,
-          41
+          40,
+          40,
+          46
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -276,15 +317,15 @@
         "prefix": "92.53.94.0/24",
         "network_status": "FOUND",
         "network_source": "RIPEstat network-info",
-        "network_error": ""
+        "network_error": null
       },
       {
         "hop": 10,
         "ip": "77.105.169.6",
         "rtt_ms": [
-          31,
-          39,
-          39
+          36,
+          45,
+          34
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -296,7 +337,7 @@
         "prefix": "77.105.168.0/22",
         "network_status": "FOUND",
         "network_source": "RIPEstat network-info",
-        "network_error": ""
+        "network_error": null
       }
     ],
     "status": "CONFIRMED"
@@ -351,7 +392,8 @@
   "evidence": [
     "identity",
     "RDAP/WHOIS",
-    "RIPE RIS",
+    "RIPE RIS looking-glass",
+    "RIPE RIS ASN neighbours",
     "bgp.tools",
     "PeeringDB",
     "routing",
