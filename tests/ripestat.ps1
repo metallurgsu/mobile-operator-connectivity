@@ -133,7 +133,6 @@ function Get-RisPeeringsPaths {
   }
   return @($out)
 }
-
 $c=Get-Config $Operator
 $sourceAsn=$c.Operator.asn
 $targetAsn=$c.Project.target.asn
