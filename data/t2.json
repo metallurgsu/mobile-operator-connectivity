@@ -35,6 +35,80 @@
       null
     ]
   },
+  "bgp_tools": {
+    "source": "bgp.tools",
+    "source_asn": "AS15378",
+    "source_ip": "178.157.145.127",
+    "source_ip_lookup": {
+      "query": "178.157.145.127",
+      "success": true,
+      "lines": [
+        "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name",
+        "15378   | 178.157.145.127  | 178.157.128.0/18    | RU | RIPE     | 2015-09-21 | T2 Mobile LLC Saint Petersburg branch"
+      ],
+      "raw": "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name\r\n15378   | 178.157.145.127  | 178.157.128.0/18    | RU | RIPE     | 2015-09-21 | T2 Mobile LLC Saint Petersburg branch",
+      "source": "bgp.tools whois"
+    },
+    "target_asn": "AS50340",
+    "target_ip": "77.105.169.6",
+    "target_ip_lookup": {
+      "query": "77.105.169.6",
+      "success": true,
+      "lines": [
+        "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name",
+        "50340   | 77.105.169.6     | 77.105.168.0/22     | RU | RIPE     | 0001-01-01 | Selectel - Moscow"
+      ],
+      "raw": "AS      | IP               | BGP Prefix          | CC | Registry | Allocated  | AS Name\r\n50340   | 77.105.169.6     | 77.105.168.0/22     | RU | RIPE     | 0001-01-01 | Selectel - Moscow",
+      "source": "bgp.tools whois"
+    },
+    "source_ip_resolved_asn": "AS15378",
+    "target_ip_resolved_asn": "AS50340",
+    "direct_as_adjacency": null,
+    "observed_as_paths": [],
+    "status": "LOOKUP_OK",
+    "note": "Uses the documented bgp.tools WHOIS service; no HTML scraping. Direct adjacency and AS_PATH require a supported BGP API/feed."
+  },
+  "peeringdb": {
+    "source": "PeeringDB",
+    "source_asn": "AS15378",
+    "target_asn": "AS50340",
+    "source_network": {
+      "id": 21214,
+      "name": "T2 North-West",
+      "asn": 15378
+    },
+    "target_network": {
+      "id": 16478,
+      "name": "Selectel MSK",
+      "asn": 50340
+    },
+    "source_ix_count": 2,
+    "target_ix_count": 8,
+    "source_facility_count": 0,
+    "target_facility_count": 2,
+    "common_ix": [
+      {
+        "ix_id": 358,
+        "name": "GNM-IX",
+        "source_ipaddr4": "178.18.225.243",
+        "target_ipaddr4": "178.18.224.197",
+        "source_speed": 300000,
+        "target_speed": 300000
+      },
+      {
+        "ix_id": 358,
+        "name": "GNM-IX",
+        "source_ipaddr4": "178.18.225.231",
+        "target_ipaddr4": "178.18.224.197",
+        "source_speed": 300000,
+        "target_speed": 300000
+      }
+    ],
+    "common_facilities": [],
+    "direct_peering_possible": true,
+    "status": "FOUND",
+    "note": "PeeringDB records interconnection presence and possible common infrastructure; it does not prove that the measured flow used a particular IX or facility."
+  },
   "routing": {
     "local_routes": [],
     "mpls_observed": null,
@@ -48,8 +122,8 @@
         "hop": 1,
         "ip": "192.168.157.123",
         "rtt_ms": [
+          6,
           4,
-          3,
           3
         ],
         "status": "REPLIED",
@@ -80,9 +154,9 @@
         "hop": 3,
         "ip": "10.226.142.66",
         "rtt_ms": [
-          31,
-          27,
-          33
+          29,
+          25,
+          30
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -98,9 +172,9 @@
         "hop": 4,
         "ip": "10.163.123.75",
         "rtt_ms": [
-          42,
-          29,
-          29
+          28,
+          28,
+          20
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -116,9 +190,9 @@
         "hop": 5,
         "ip": "10.163.123.70",
         "rtt_ms": [
-          30,
-          34,
-          23
+          27,
+          29,
+          20
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -134,9 +208,9 @@
         "hop": 6,
         "ip": "10.163.122.181",
         "rtt_ms": [
-          35,
-          23,
-          35
+          32,
+          34,
+          23
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -152,9 +226,9 @@
         "hop": 7,
         "ip": "10.153.254.114",
         "rtt_ms": [
-          28,
-          27,
-          35
+          31,
+          30,
+          23
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -170,9 +244,9 @@
         "hop": 8,
         "ip": "109.239.137.217",
         "rtt_ms": [
+          34,
           39,
-          41,
-          37
+          31
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -190,7 +264,7 @@
         "rtt_ms": [
           36,
           34,
-          44
+          41
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -208,7 +282,7 @@
         "hop": 10,
         "ip": "77.105.169.6",
         "rtt_ms": [
-          35,
+          31,
           39,
           39
         ],
@@ -278,6 +352,8 @@
     "identity",
     "RDAP/WHOIS",
     "RIPE RIS",
+    "bgp.tools",
+    "PeeringDB",
     "routing",
     "traceroute",
     "TCP",
