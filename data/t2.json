@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "operator": {
+    "name": "T2",
+    "short_name": "T2",
+    "tested_ip": "178.157.136.79",
+    "asn": "AS15378",
+    "prefix": "178.157.128.0/18"
+  },
+  "measurement_target": {
+    "name": "Selectel VPS",
+    "ip": "77.105.169.6",
+    "asn": "AS50340",
+    "prefix": "77.105.168.0/22"
+  },
+  "measurement": {
+    "date": "2026-09-25",
+    "status": "CONFIRMED"
+  },
+  "identity": {
+    "ip": "178.157.136.79",
+    "asn": "AS15378",
+    "prefix": "178.157.128.0/18"
+  },
+  "whois": {
+    "available": true
+  },
+  "bgp": {
+    "reachability": true,
+    "active_path": {
+      "next_hop": "92.53.94.13",
+      "local_pref": 110,
+      "as_path": "15378 I",
+      "protocol": "BGP",
+      "router_id": "92.53.94.13"
+    },
+    "alternative_paths": [
+      {
+        "as_path": "1299 12389 15378",
+        "active": false,
+        "reason": "Local Preference"
+      },
+      {
+        "as_path": "20485 20764 15378",
+        "active": false,
+        "reason": "Local Preference"
+      }
+    ]
+  },
+  "routing": {
+    "internal_selectel": {
+      "next_hops": [
+        "92.53.95.32",
+        "92.53.95.64"
+      ],
+      "interfaces": [
+        "ae7.2",
+        "ae0.7"
+      ],
+      "mpls": true,
+      "lsp": [
+        "brz-rtr3-to-yrl-rtr1-1",
+        "brz-rtr3-to-yrl-rtr1-2"
+      ]
+    }
+  },
+  "traceroute": {
+    "hops": [
+      "77.105.169.253",
+      "92.53.95.63",
+      "92.53.95.49"
+    ],
+    "timeouts_after_hop": 3
+  },
+  "connectivity": {
+    "tcp": {
+      "22": {
+        "success": true
+      },
+      "8080": {
+        "success": true
+      }
+    },
+    "http": {
+      "status_code": 200,
+      "success": true
+    },
+    "bidirectional": true
+  },
+  "tcpdump": {
+    "available": true,
+    "tcp_handshake": true,
+    "http_exchange": true,
+    "connection_close": true
+  },
+  "security": {
+    "iptables": {
+      "status": "ACCEPT",
+      "rules": 0
+    },
+    "nftables": {
+      "status": "NO_RELEVANT_RULES"
+    },
+    "fail2ban": {
+      "status": "ACTIVE",
+      "jail": "sshd"
+    }
+  },
+  "ix": {
+    "data_ix": true,
+    "global_ix": true,
+    "selectel_presence": [
+      "MSK-IX",
+      "GLOBAL-IX",
+      "GNM-IX",
+      "PITER-IX",
+      "W-IX"
+    ],
+    "direct_peer_proven": false,
+    "specific_ix_path_proven": false
+  },
+  "result": {
+    "ip_connectivity": true,
+    "application_connectivity": true,
+    "bgp_reachability": true,
+    "mpls_observed": true,
+    "direct_physical_interconnect": false,
+    "specific_ix_path": false,
+    "internet_transit": false,
+    "exact_physical_path": false
+  },
+  "evidence": [
+    "WHOIS",
+    "RIPE RIS",
+    "BGP route lookup",
+    "PeeringDB",
+    "traceroute",
+    "TCP",
+    "HTTP",
+    "tcpdump"
+  ]
+}
