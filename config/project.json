@@ -1,0 +1,4 @@
+{
+  "name":"Mobile Operator Connectivity",
+  "target":{"name":"Selectel VPS","ip":"77.105.169.6","asn":"AS50340","prefix":"77.105.168.0/22"}
+}
