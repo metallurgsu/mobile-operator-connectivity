@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Mobile Operator Connectivity",
+  "type":"object",
+  "required":["schema_version","project","operators"],
+  "properties":{
+    "schema_version":{"const":"1.0"},
+    "project":{"type":"object","required":["name","measurement_target"]},
+    "operators":{"type":"array","items":{"type":"object","required":["name","short_name","file","status"]}}
+  }
+}
