@@ -12,10 +12,18 @@ function Invoke-RipeStat {
   }
 }
 
+function Get-ObjectValues {
+  param($Value)
+  if($null -eq $Value){return @()}
+  if($Value -is [System.Collections.IDictionary]){return @($Value.Values)}
+  if(($Value -is [System.Collections.IEnumerable]) -and -not ($Value -is [string])){return @($Value)}
+  return @($Value)
+}
+
 function Convert-AsPath {
   param($Path)
   if($null -eq $Path){return @()}
-  if($Path -is [string]){return @($Path -split 's+' | Where-Object {$_})}
+  if($Path -is [string]){return @($Path -split '\s+' | Where-Object {$_})}
   return @($Path | ForEach-Object {[string]$_})
 }
 
@@ -24,10 +32,9 @@ function Test-DirectAdjacency {
   $s=$SourceAsn -replace '^AS',''
   $t=$TargetAsn -replace '^AS',''
   for($i=0;$i -lt $Path.Count-1;$i++){
-    if((($Path[$i] -replace '[{}()]','') -eq $s -and ($Path[$i+1] -replace '[{}()]','') -eq $t) -or
-       (($Path[$i] -replace '[{}()]','') -eq $t -and ($Path[$i+1] -replace '[{}()]','') -eq $s)){
-      return $true
-    }
+    $a=$Path[$i] -replace '[{}()]',''
+    $b=$Path[$i+1] -replace '[{}()]',''
+    if(($a -eq $s -and $b -eq $t) -or ($a -eq $t -and $b -eq $s)){return $true}
   }
   return $false
 }
@@ -35,12 +42,35 @@ function Test-DirectAdjacency {
 function Get-NeighbourMatch {
   param($Neighbours,[string]$WantedAsn)
   $wanted=[int]($WantedAsn -replace '^AS','')
-  foreach($n in @($Neighbours)){
+  foreach($n in Get-ObjectValues $Neighbours){
     if([int]$n.asn -eq $wanted){
       return [pscustomobject]@{found=$true;asn=$n.asn;type=$n.type;power=$n.power}
     }
   }
   return [pscustomobject]@{found=$false;asn=$wanted;type=$null;power=$null}
+}
+
+function Get-LookingGlassPaths {
+  param($Data,[string]$SourceAsn,[string]$TargetAsn)
+  $out=@()
+  foreach($rrc in Get-ObjectValues $Data.rrcs){
+    $rrcId=if($rrc.rrc){$rrc.rrc}elseif($rrc.id){$rrc.id}else{$null}
+    $peers=if($rrc.peers){Get-ObjectValues $rrc.peers}elseif($rrc.entries){Get-ObjectValues $rrc.entries}else{@()}
+    foreach($peer in $peers){
+      $path=Convert-AsPath $peer.as_path
+      if($path.Count -gt 0){
+        $out += [pscustomobject]@{
+          rrc=$rrcId
+          peer=$peer.peer
+          prefix=$peer.prefix
+          next_hop=$peer.next_hop
+          as_path=$path
+          direct_adjacency=(Test-DirectAdjacency $path $SourceAsn $TargetAsn)
+        }
+      }
+    }
+  }
+  return @($out)
 }
 
 $c=Get-Config $Operator
@@ -49,24 +79,23 @@ $targetAsn=$c.Project.target.asn
 $targetPrefix=$c.Project.target.prefix
 $targetIp=$c.Project.target.ip
 
-$lg=Invoke-RipeStat "looking-glass" $targetPrefix 1
+$lg=Invoke-RipeStat "looking-glass" $targetPrefix
+$state=Invoke-RipeStat "bgp-state" $targetPrefix
 $sourceNeighbours=Invoke-RipeStat "asn-neighbours" $sourceAsn 1
 $targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn 1
 
-$paths=@()
-if($lg.success){
-  foreach($rrc in @($lg.data.rrcs)){
-    foreach($peer in @($rrc.peers)){
-      $path=Convert-AsPath $peer.as_path
-      if($path.Count -gt 0){
-        $paths += [pscustomobject]@{
-          rrc=$rrc.id
-          peer=$peer.peer
-          prefix=$peer.prefix
-          next_hop=$peer.next_hop
-          as_path=$path
-          direct_adjacency=(Test-DirectAdjacency $path $sourceAsn $targetAsn)
-        }
+$lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}
+
+$statePaths=@()
+if($state.success){
+  foreach($route in Get-ObjectValues $state.data.bgp_state){
+    $path=Convert-AsPath $route.path
+    if($path.Count -gt 0){
+      $statePaths += [pscustomobject]@{
+        target_prefix=$route.target_prefix
+        source_id=$route.source_id
+        path=$path
+        direct_adjacency=(Test-DirectAdjacency $path $sourceAsn $targetAsn)
       }
     }
   }
@@ -74,8 +103,9 @@ if($lg.success){
 
 $sourceMatch=if($sourceNeighbours.success){Get-NeighbourMatch $sourceNeighbours.data.neighbours $targetAsn}else{$null}
 $targetMatch=if($targetNeighbours.success){Get-NeighbourMatch $targetNeighbours.data.neighbours $sourceAsn}else{$null}
-$pathDirect=(@($paths | Where-Object {$_.direct_adjacency})).Count -gt 0
+$pathDirect=(@($lgPaths | Where-Object {$_.direct_adjacency})).Count -gt 0 -or (@($statePaths | Where-Object {$_.direct_adjacency})).Count -gt 0
 $neighbourDirect=($sourceMatch -and $sourceMatch.found) -or ($targetMatch -and $targetMatch.found)
+$anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $targetNeighbours.success
 
 [pscustomobject]@{
   source="RIPEstat"
@@ -86,9 +116,17 @@ $neighbourDirect=($sourceMatch -and $sourceMatch.found) -or ($targetMatch -and $
   looking_glass=[pscustomobject]@{
     success=$lg.success
     uri=$lg.uri
-    route_count=$paths.Count
-    paths=$paths
+    route_count=$lgPaths.Count
+    paths=$lgPaths
     error=$lg.error
+  }
+  bgp_state=[pscustomobject]@{
+    success=$state.success
+    uri=$state.uri
+    route_count=$statePaths.Count
+    paths=$statePaths
+    query_time=$state.data.query_time
+    error=$state.error
   }
   source_neighbours=[pscustomobject]@{
     success=$sourceNeighbours.success
@@ -102,9 +140,9 @@ $neighbourDirect=($sourceMatch -and $sourceMatch.found) -or ($targetMatch -and $
     source=$targetMatch
     error=$targetNeighbours.error
   }
-  direct_as_adjacency=if($pathDirect -or $neighbourDirect){$true}elseif($lg.success -or $sourceNeighbours.success -or $targetNeighbours.success){$false}else{$null}
-  path_observation_count=$paths.Count
-  direct_path_observation_count=@($paths | Where-Object {$_.direct_adjacency}).Count
-  status=if($lg.success -and $sourceNeighbours.success -and $targetNeighbours.success){"LOOKUP_OK"}elseif($lg.success -or $sourceNeighbours.success -or $targetNeighbours.success){"PARTIAL"}else{"ERROR"}
-  note="RIPEstat provides BGP control-plane observations from RIPE RIS. AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
+  direct_as_adjacency=if($pathDirect -or $neighbourDirect){$true}elseif($anySuccess){$false}else{$null}
+  path_observation_count=($lgPaths.Count + $statePaths.Count)
+  direct_path_observation_count=(@($lgPaths | Where-Object {$_.direct_adjacency}).Count + @($statePaths | Where-Object {$_.direct_adjacency}).Count)
+  status=if($lg.success -and $state.success -and $sourceNeighbours.success -and $targetNeighbours.success){"LOOKUP_OK"}elseif($anySuccess){"PARTIAL"}else{"ERROR"}
+  note="RIPEstat provides BGP control-plane observations from RIPE RIS. Looking Glass and BGP State expose observed AS paths; AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
 }
