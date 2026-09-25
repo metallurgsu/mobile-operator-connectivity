@@ -25,6 +25,7 @@ function rowsFor(op){
   {test:"Direct physical interconnect",result:r.direct_physical_interconnect,details:"Requires data-plane evidence"},
   {test:"Specific IX path",result:r.specific_ix_path,details:"Explicit path evidence only"},
   {test:"Internet transit",result:r.internet_transit,details:"Third-party ASN on measured path"},
+  {test:"Resilience hypothesis",result:r.resilience_hypothesis,details:"Passive hypothesis only — not a verified failover test"},
   {test:"Exact physical path",result:r.exact_physical_path,details:"Not inferred"}
  ];
 }
@@ -54,7 +55,7 @@ function renderRouting(ops){
  $("#routingTable").bootstrapTable("destroy").bootstrapTable({columns:[{field:"operator",title:"Оператор"},{field:"bgp",title:"BGP",formatter:v=>v},{field:"origin",title:"Origin"},{field:"visibility",title:"RIS visibility"},{field:"risPaths",title:"RIPE paths"},{field:"directAdj",title:"AS adjacency",formatter:v=>v},{field:"commonIx",title:"Common IX"},{field:"ixPath",title:"IX path",formatter:v=>v},{field:"transit",title:"Transit",formatter:v=>v},{field:"physical",title:"Physical",formatter:v=>v},{field:"ixStatus",title:"IX status"}],data:rows});
 }
 function renderEvidence(ops){
- const blocks=ops.map(op=>{const rs=op.ripestat||{},p=op.peeringdb||{},x=op.ix||{};return '<div class="mb-3"><h6>'+esc(opName(op))+'</h6><ul class="mb-0"><li>PeeringDB: '+esc(p.status||"—")+', common IX: '+esc((p.common_ix||[]).map(i=>i.name).join(", ")||"—")+'</li><li>RIPEstat: '+esc(rs.status||"—")+', AS-path observations: '+esc(rs.path_observation_count||0)+', direct adjacency: '+esc(rs.direct_as_adjacency)+'</li><li>IX classifier: '+esc(x.status||"—")+'; specific path: '+esc(op.result?.specific_ix_path)+'</li><li>Note: '+esc(rs.note||p.note||x.note||"—")+'</li></ul></div>';}).join("");
+ const blocks=ops.map(op=>{const rs=op.ripestat||{},p=op.peeringdb||{},x=op.ix||{},rz=op.resilience||{};return '<div class="mb-3"><h6>'+esc(opName(op))+'</h6><ul class="mb-0"><li>PeeringDB: '+esc(p.status||"—")+', common IX: '+esc((p.common_ix||[]).map(i=>i.name).join(", ")||"—")+'</li><li>RIPEstat: '+esc(rs.status||"—")+', AS-path observations: '+esc(rs.path_observation_count||0)+', direct adjacency: '+esc(rs.direct_as_adjacency)+'</li><li>IX classifier: '+esc(x.status||"—")+'; specific path: '+esc(op.result?.specific_ix_path)+'</li><li>Resilience hypothesis: '+esc(rz.hypothesis||"—")+' (passive measurement only — not a verified failover test)</li><li>Note: '+esc(rs.note||p.note||x.note||"—")+'</li></ul></div>';}).join("");
  $id("evidence").innerHTML=blocks||"Нет данных.";
 }
 async function loadJson(url){const response=await fetch(url+"?t="+Date.now());if(!response.ok)throw new Error("HTTP "+response.status);const data=await response.json();if(data.schema_version!=="1.0")throw new Error("Unsupported schema version: "+(data.schema_version||"unknown"));return data;}

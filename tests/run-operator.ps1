@@ -18,6 +18,7 @@ $http=& "$PSScriptRoot/http.ps1" -Operator $Operator
 $tcpdump=& "$PSScriptRoot/tcpdump.ps1" -Operator $Operator
 $security=& "$PSScriptRoot/security.ps1" -Operator $Operator
 $ix=& "$PSScriptRoot/ix.ps1" -Operator $Operator
+$resilience=& "$PSScriptRoot/resilience.ps1" -Operator $Operator
 $ip=[bool]($tcp.'22'.success -or $tcp.'8080'.success)
 $app=[bool]$http.success
 $status=if($ip -and $app){"CONFIRMED"}elseif($ip){"PARTIAL"}else{"FAILED"}
@@ -38,8 +39,9 @@ $data=[ordered]@{
  tcpdump=$tcpdump
  security=$security
  ix=$ix
- result=[ordered]@{ip_connectivity=$ip;application_connectivity=$app;bgp_reachability=$bgp.reachability;mpls_observed=$routing.mpls_observed;direct_physical_interconnect=$ix.direct_peer_proven;specific_ix_path=$ix.specific_ix_path_proven;internet_transit=$ix.internet_transit;exact_physical_path=$null}
- evidence=@("identity","RDAP/WHOIS","RIPE RIS looking-glass","RIPE RIS ASN neighbours","bgp.tools","PeeringDB","routing","traceroute","TCP","HTTP")
+ resilience=$resilience
+ result=[ordered]@{ip_connectivity=$ip;application_connectivity=$app;bgp_reachability=$bgp.reachability;mpls_observed=$routing.mpls_observed;direct_physical_interconnect=$ix.direct_peer_proven;specific_ix_path=$ix.specific_ix_path_proven;internet_transit=$ix.internet_transit;exact_physical_path=$null;resilience_hypothesis=$resilience.hypothesis}
+ evidence=@("identity","RDAP/WHOIS","RIPE RIS looking-glass","RIPE RIS ASN neighbours","RIPE RIS peerings","bgp.tools","PeeringDB","routing","traceroute","TCP","HTTP")
 }
 $file="$root/data/$($c.Operator.short_name.ToLower()).json"
 Save-Json $file $data
