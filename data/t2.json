@@ -3,7 +3,7 @@
   "operator": {
     "name": "T2",
     "short_name": "T2",
-    "tested_ip": "178.157.136.79",
+    "tested_ip": "178.157.145.127",
     "asn": "AS15378",
     "prefix": "178.157.128.0/18"
   },
@@ -15,62 +15,50 @@
   },
   "measurement": {
     "date": "2026-09-25",
-    "status": "CONFIRMED"
+    "status": "PARTIAL"
   },
   "identity": {
-    "ip": "178.157.136.79",
+    "ip": "178.157.145.127",
+    "configured_ip": "178.157.136.79",
     "asn": "AS15378",
-    "prefix": "178.157.128.0/18"
+    "prefix": "178.157.128.0/18",
+    "public_ip_detected": true
   },
   "whois": {
-    "available": true
+    "available": true,
+    "handle": "178.157.128.0 - 178.157.159.255",
+    "name": "T2RU-SUBSCRIBER-POOL-NET",
+    "country": "RU",
+    "status": "CONFIRMED"
   },
   "bgp": {
     "reachability": true,
-    "active_path": {
-      "next_hop": "92.53.94.13",
-      "local_pref": 110,
-      "as_path": "15378 I",
-      "protocol": "BGP",
-      "router_id": "92.53.94.13"
-    },
-    "alternative_paths": [
-      {
-        "as_path": "1299 12389 15378",
-        "active": false,
-        "reason": "Local Preference"
-      },
-      {
-        "as_path": "20485 20764 15378",
-        "active": false,
-        "reason": "Local Preference"
-      }
+    "route_count": 1,
+    "routes": [
+      null
     ]
   },
   "routing": {
-    "internal_selectel": {
-      "next_hops": [
-        "92.53.95.32",
-        "92.53.95.64"
-      ],
-      "interfaces": [
-        "ae7.2",
-        "ae0.7"
-      ],
-      "mpls": true,
-      "lsp": [
-        "brz-rtr3-to-yrl-rtr1-1",
-        "brz-rtr3-to-yrl-rtr1-2"
-      ]
-    }
+    "local_routes": [],
+    "mpls_observed": null,
+    "internal_selectel": null,
+    "status": "NOT_PROVEN"
   },
   "traceroute": {
+    "target": "77.105.169.6",
     "hops": [
-      "77.105.169.253",
-      "92.53.95.63",
-      "92.53.95.49"
+      "3",
+      "*",
+      "6",
+      "5",
+      "0",
+      "1",
+      "4",
+      "7",
+      "9",
+      "6"
     ],
-    "timeouts_after_hop": 3
+    "status": "CONFIRMED"
   },
   "connectivity": {
     "tcp": {
@@ -78,65 +66,54 @@
         "success": true
       },
       "8080": {
-        "success": true
+        "success": false
       }
     },
     "http": {
-      "status_code": 200,
-      "success": true
+      "url": "http://77.105.169.6:8080/",
+      "status_code": null,
+      "success": false,
+      "error": "Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение. (77.105.169.6:8080)"
     },
-    "bidirectional": true
+    "bidirectional": null
   },
   "tcpdump": {
-    "available": true,
-    "tcp_handshake": true,
-    "http_exchange": true,
-    "connection_close": true
+    "available": false,
+    "tcp_handshake": null,
+    "http_exchange": null,
+    "connection_close": null,
+    "status": "NOT_TESTED",
+    "note": "Requires packet capture on the measurement host or authorized remote host."
   },
   "security": {
-    "iptables": {
-      "status": "ACCEPT",
-      "rules": 0
-    },
-    "nftables": {
-      "status": "NO_RELEVANT_RULES"
-    },
-    "fail2ban": {
-      "status": "ACTIVE",
-      "jail": "sshd"
-    }
+    "source_host_firewall": "NOT_TESTED",
+    "remote_selectel_firewall": "NOT_TESTED",
+    "status": "NOT_PROVEN"
   },
   "ix": {
-    "data_ix": true,
-    "global_ix": true,
-    "selectel_presence": [
-      "MSK-IX",
-      "GLOBAL-IX",
-      "GNM-IX",
-      "PITER-IX",
-      "W-IX"
-    ],
-    "direct_peer_proven": false,
-    "specific_ix_path_proven": false
+    "direct_peer_proven": null,
+    "specific_ix_path_proven": null,
+    "internet_transit": null,
+    "status": "NOT_PROVEN",
+    "note": "Public measurements do not prove a physical IX, direct peer, or Internet transit path."
   },
   "result": {
     "ip_connectivity": true,
-    "application_connectivity": true,
+    "application_connectivity": false,
     "bgp_reachability": true,
-    "mpls_observed": true,
-    "direct_physical_interconnect": false,
-    "specific_ix_path": false,
-    "internet_transit": false,
-    "exact_physical_path": false
+    "mpls_observed": null,
+    "direct_physical_interconnect": null,
+    "specific_ix_path": null,
+    "internet_transit": null,
+    "exact_physical_path": null
   },
   "evidence": [
-    "WHOIS",
+    "identity",
+    "RDAP/WHOIS",
     "RIPE RIS",
-    "BGP route lookup",
-    "PeeringDB",
+    "routing",
     "traceroute",
     "TCP",
-    "HTTP",
-    "tcpdump"
+    "HTTP"
   ]
 }

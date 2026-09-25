@@ -1,14 +1,59 @@
 {
-  "schema_version":"1.0",
-  "project":{
-    "name":"Mobile Operator Connectivity",
-    "measurement_target":{"name":"Selectel VPS","ip":"77.105.169.6","asn":"AS50340","prefix":"77.105.168.0/22"}
+  "schema_version": "1.0",
+  "project": {
+    "name": "Mobile Operator Connectivity",
+    "measurement_target": {
+      "name": "Selectel VPS",
+      "ip": "77.105.169.6",
+      "asn": "AS50340",
+      "prefix": "77.105.168.0/22"
+    }
   },
-  "operators":[
-    {"name":"MTS","short_name":"MTS","file":"mts.json","tested_ip":"","asn":"","prefix":"","status":"NOT_TESTED"},
-    {"name":"MegaFon","short_name":"MegaFon","file":"megafon.json","tested_ip":"","asn":"","prefix":"","status":"NOT_TESTED"},
-    {"name":"T2","short_name":"T2","file":"t2.json","tested_ip":"178.157.136.79","asn":"AS15378","prefix":"178.157.128.0/18","status":"CONFIRMED"},
-    {"name":"Beeline","short_name":"Beeline","file":"beeline.json","tested_ip":"","asn":"","prefix":"","status":"NOT_TESTED"},
-    {"name":"Yota","short_name":"Yota","file":"yota.json","tested_ip":"","asn":"","prefix":"","status":"NOT_TESTED"}
+  "operators": [
+    {
+      "name": "MTS",
+      "short_name": "MTS",
+      "file": "mts.json",
+      "tested_ip": "",
+      "asn": "",
+      "prefix": "",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "MegaFon",
+      "short_name": "MegaFon",
+      "file": "megafon.json",
+      "tested_ip": "",
+      "asn": "",
+      "prefix": "",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "T2",
+      "short_name": "T2",
+      "file": "t2.json",
+      "tested_ip": "178.157.145.127",
+      "asn": "AS15378",
+      "prefix": "178.157.128.0/18",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "Beeline",
+      "short_name": "Beeline",
+      "file": "beeline.json",
+      "tested_ip": "",
+      "asn": "",
+      "prefix": "",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Yota",
+      "short_name": "Yota",
+      "file": "yota.json",
+      "tested_ip": "",
+      "asn": "",
+      "prefix": "",
+      "status": "NOT_TESTED"
+    }
   ]
 }
