@@ -25,7 +25,12 @@ concurrency:
 
 jobs:
   measure:
-    runs-on: [self-hosted, windows, "${{ inputs.operator || 'T2' }}"]
+    if: github.event_name == 'schedule' || matrix.operator == inputs.operator
+    strategy:
+      fail-fast: false
+      matrix:
+        operator: [MTS, MegaFon, T2, Beeline, Yota]
+    runs-on: [self-hosted, windows, "${{ matrix.operator }}"]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -35,14 +40,14 @@ jobs:
       - name: Run measurement
         shell: pwsh
         env:
-          OPERATOR: ${{ inputs.operator || 'T2' }}
+          OPERATOR: ${{ matrix.operator }}
         run: |
           ./tests/run-operator.ps1 -Operator $env:OPERATOR
 
       - name: Commit measurement results
         shell: pwsh
         env:
-          OPERATOR: ${{ inputs.operator || 'T2' }}
+          OPERATOR: ${{ matrix.operator }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
