@@ -25,11 +25,10 @@ concurrency:
 
 jobs:
   measure:
-    if: github.event_name == 'schedule' || matrix.operator == inputs.operator
     strategy:
       fail-fast: false
       matrix:
-        operator: [MTS, MegaFon, T2, Beeline, Yota]
+        operator: ${{ github.event_name == 'schedule' && fromJSON('["MTS","MegaFon","T2","Beeline","Yota"]') || fromJSON(format('["{0}"]', inputs.operator)) }}
     runs-on: [self-hosted, windows, "${{ matrix.operator }}"]
     steps:
       - name: Checkout
