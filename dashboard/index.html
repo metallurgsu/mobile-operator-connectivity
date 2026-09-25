@@ -8,7 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css" rel="stylesheet">
 <style>
-body{background:#f5f6f8}.sidebar{width:240px}.metric{min-height:108px}.nav-link.active{background:#0d6efd;color:#fff}.table td,.table th{vertical-align:middle}
+body{background:#f5f6f8}.sidebar{width:240px}.metric{min-height:108px}.nav-link.active{background:#0d6efd;color:#fff}.table td,.table th{vertical-align:middle}.evidence{font-size:.86rem}.hop-public{background:#fff8e1}.hop-target{background:#e8f5e9}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.nowrap{white-space:nowrap}
 @media(max-width:767.98px){.sidebar{width:280px}}
 </style>
 </head>
@@ -21,9 +21,18 @@ body{background:#f5f6f8}.sidebar{width:240px}.metric{min-height:108px}.nav-link.
 <div id="error" class="alert alert-danger d-none"></div>
 <div class="d-flex justify-content-between align-items-center mb-3"><div><h2 id="title" class="mb-1">Все операторы</h2><div class="text-secondary" id="target"></div></div><span class="badge text-bg-secondary" id="loadStatus">Загрузка…</span></div>
 <div class="row g-3 mb-4" id="summary"></div>
-<div class="card mb-4"><div class="card-header">Матрица связности</div><div class="table-responsive"><table id="matrix" data-toggle="table" data-search="false" data-pagination="false"></table></div></div>
+
+<div class="card mb-4"><div class="card-header">Сводная матрица связности и маршрутизации</div><div class="table-responsive"><table id="matrix" data-toggle="table" data-search="false" data-pagination="false"></table></div></div>
+
 <div class="card mb-4"><div class="card-header">Последние измерения</div><div class="table-responsive"><table id="recent" data-toggle="table" data-pagination="false"></table></div></div>
-<div class="card" id="detailsCard"><div class="card-header">Детали</div><div class="card-body" id="details"></div></div>
+
+<div class="card mb-4" id="detailsCard"><div class="card-header">Детали оператора</div><div class="card-body" id="details"></div></div>
+
+<div class="card mb-4"><div class="card-header">Traceroute</div><div class="table-responsive"><table id="traceTable" data-toggle="table" data-pagination="false"></table></div></div>
+
+<div class="card mb-4"><div class="card-header">BGP / RIPEstat / PeeringDB</div><div class="table-responsive"><table id="routingTable" data-toggle="table" data-pagination="false"></table></div></div>
+
+<div class="card"><div class="card-header">Доказательная база</div><div class="card-body evidence" id="evidence"></div></div>
 </main></div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
