@@ -47,16 +47,102 @@
   "traceroute": {
     "target": "77.105.169.6",
     "hops": [
-      "3",
-      "*",
-      "6",
-      "5",
-      "0",
-      "1",
-      "4",
-      "7",
-      "9",
-      "6"
+      {
+        "hop": 1,
+        "ip": "3",
+        "rtt_ms": [
+          4,
+          4,
+          4
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 2,
+        "ip": null,
+        "rtt_ms": [],
+        "status": "TIMEOUT"
+      },
+      {
+        "hop": 3,
+        "ip": "6",
+        "rtt_ms": [
+          20,
+          20,
+          37
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 4,
+        "ip": "5",
+        "rtt_ms": [
+          33,
+          31,
+          27
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 5,
+        "ip": "0",
+        "rtt_ms": [
+          26,
+          19,
+          29
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 6,
+        "ip": "1",
+        "rtt_ms": [
+          26,
+          43,
+          26
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 7,
+        "ip": "4",
+        "rtt_ms": [
+          25,
+          30,
+          23
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 8,
+        "ip": "7",
+        "rtt_ms": [
+          35,
+          39,
+          40
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 9,
+        "ip": "9",
+        "rtt_ms": [
+          38,
+          37,
+          36
+        ],
+        "status": "REPLIED"
+      },
+      {
+        "hop": 10,
+        "ip": "6",
+        "rtt_ms": [
+          42,
+          40,
+          37
+        ],
+        "status": "REPLIED"
+      }
     ],
     "status": "CONFIRMED"
   },
