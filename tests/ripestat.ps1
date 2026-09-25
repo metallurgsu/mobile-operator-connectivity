@@ -2,9 +2,12 @@ param([Parameter(Mandatory)][string]$Operator)
 . "$PSScriptRoot/common.ps1"
 
 function Invoke-RipeStat {
-  param([Parameter(Mandatory)][string]$Endpoint,[Parameter(Mandatory)][string]$Resource,[int]$Lod=0)
+  param([Parameter(Mandatory)][string]$Endpoint,[Parameter(Mandatory)][string]$Resource,[hashtable]$ExtraQuery=@{})
   $encoded=[uri]::EscapeDataString($Resource)
-  $uri="https://stat.ripe.net/data/$Endpoint/data.json?resource=$encoded&lod=$Lod"
+  $uri="https://stat.ripe.net/data/$Endpoint/data.json?resource=$encoded"
+  foreach($key in $ExtraQuery.Keys){
+    $uri+="&$key=$([uri]::EscapeDataString([string]$ExtraQuery[$key]))"
+  }
   try {
     [pscustomobject]@{success=$true;uri=$uri;data=(Invoke-RestMethod -Uri $uri -Method Get -TimeoutSec 30)}
   } catch {
@@ -23,7 +26,7 @@ function Get-ObjectValues {
 function Convert-AsPath {
   param($Path)
   if($null -eq $Path){return @()}
-  if($Path -is [string]){return @($Path -split '\s+' | Where-Object {$_})}
+  if($Path -is [string]){return @($Path -split 's+' | Where-Object {$_})}
   return @($Path | ForEach-Object {[string]$_})
 }
 
@@ -53,19 +56,42 @@ function Get-NeighbourMatch {
 function Get-LookingGlassPaths {
   param($Data,[string]$SourceAsn,[string]$TargetAsn)
   $out=@()
-  foreach($rrc in Get-ObjectValues $Data.rrcs){
-    $rrcId=if($rrc.rrc){$rrc.rrc}elseif($rrc.id){$rrc.id}else{$null}
-    $peers=if($rrc.peers){Get-ObjectValues $rrc.peers}elseif($rrc.entries){Get-ObjectValues $rrc.entries}else{@()}
-    foreach($peer in $peers){
-      $path=Convert-AsPath $peer.as_path
-      if($path.Count -gt 0){
-        $out += [pscustomobject]@{
-          rrc=$rrcId
-          peer=$peer.peer
-          prefix=$peer.prefix
-          next_hop=$peer.next_hop
-          as_path=$path
-          direct_adjacency=(Test-DirectAdjacency $path $SourceAsn $TargetAsn)
+  # Current RIPEstat format: data.rrcs is an object keyed by RRC;
+  # each RRC contains an "entries" list. Older formats may expose peers.
+  if($Data.rrcs -is [System.Collections.IDictionary]){
+    foreach($entry in $Data.rrcs.GetEnumerator()){
+      $rrcId=[string]$entry.Key
+      $rrc=$entry.Value
+      $peers=if($rrc.entries){Get-ObjectValues $rrc.entries}elseif($rrc.peers){Get-ObjectValues $rrc.peers}else{@()}
+      foreach($peer in $peers){
+        $path=Convert-AsPath $peer.as_path
+        if($path.Count -gt 0){
+          $out += [pscustomobject]@{
+            rrc=$rrcId
+            peer=$peer.peer
+            prefix=$peer.prefix
+            next_hop=$peer.next_hop
+            as_path=$path
+            direct_adjacency=(Test-DirectAdjacency $path $SourceAsn $TargetAsn)
+          }
+        }
+      }
+    }
+  } else {
+    foreach($rrc in Get-ObjectValues $Data.rrcs){
+      $rrcId=if($rrc.rrc){$rrc.rrc}elseif($rrc.id){$rrc.id}else{$null}
+      $peers=if($rrc.entries){Get-ObjectValues $rrc.entries}elseif($rrc.peers){Get-ObjectValues $rrc.peers}else{@()}
+      foreach($peer in $peers){
+        $path=Convert-AsPath $peer.as_path
+        if($path.Count -gt 0){
+          $out += [pscustomobject]@{
+            rrc=$rrcId
+            peer=$peer.peer
+            prefix=$peer.prefix
+            next_hop=$peer.next_hop
+            as_path=$path
+            direct_adjacency=(Test-DirectAdjacency $path $SourceAsn $TargetAsn)
+          }
         }
       }
     }
@@ -81,8 +107,8 @@ $targetIp=$c.Project.target.ip
 
 $lg=Invoke-RipeStat "looking-glass" $targetPrefix
 $state=Invoke-RipeStat "bgp-state" $targetPrefix
-$sourceNeighbours=Invoke-RipeStat "asn-neighbours" $sourceAsn 1
-$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn 1
+$sourceNeighbours=Invoke-RipeStat "asn-neighbours" $sourceAsn @{lod=1}
+$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn @{lod=1}
 
 $lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}
 
@@ -144,5 +170,5 @@ $anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $ta
   path_observation_count=($lgPaths.Count + $statePaths.Count)
   direct_path_observation_count=(@($lgPaths | Where-Object {$_.direct_adjacency}).Count + @($statePaths | Where-Object {$_.direct_adjacency}).Count)
   status=if($lg.success -and $state.success -and $sourceNeighbours.success -and $targetNeighbours.success){"LOOKUP_OK"}elseif($anySuccess){"PARTIAL"}else{"ERROR"}
-  note="RIPEstat provides BGP control-plane observations from RIPE RIS. Looking Glass and BGP State expose observed AS paths; AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
+  note="RIPEstat RIS control-plane observations. Looking Glass uses RRC entries/peers; BGP State exposes AS paths. AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
 }
