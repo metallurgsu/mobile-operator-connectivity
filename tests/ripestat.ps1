@@ -99,7 +99,41 @@ function Get-LookingGlassPaths {
   return @($out)
 }
 
-$c=Get-Config $Operator
+
+function Get-RisPeeringsPaths {
+  param($Data,[string]$SourceAsn,[string]$TargetAsn)
+  $out=@()
+  $source=[int]($SourceAsn -replace '^AS','')
+  $target=[int]($TargetAsn -replace '^AS','')
+  foreach($group in Get-ObjectValues $Data.peerings){
+    $probe=$group.probe
+    foreach($peer in Get-ObjectValues $group.peers){
+      foreach($route in Get-ObjectValues $peer.routes){
+        $path=$null
+        if($route -is [string]){
+          $path=Convert-AsPath $route
+        } elseif($null -ne $route.path){
+          $path=Convert-AsPath $route.path
+        } elseif($null -ne $route.as_path){
+          $path=Convert-AsPath $route.as_path
+        }
+        if($path.Count -gt 0){
+          $out += [pscustomobject]@{
+            probe=$probe
+            peer_asn=$peer.asn
+            peer_ip=$peer.ip
+            ip_version=$peer.ip_version
+            table_version=$peer.table_version
+            as_path=$path
+            direct_adjacency=(Test-DirectAdjacency $path $SourceAsn $TargetAsn)
+          }
+        }
+      }
+    }
+  }
+  return @($out)
+}
+`r`n$c=Get-Config $Operator
 $sourceAsn=$c.Operator.asn
 $targetAsn=$c.Project.target.asn
 $targetPrefix=$c.Project.target.prefix
@@ -108,9 +142,9 @@ $targetIp=$c.Project.target.ip
 $lg=Invoke-RipeStat "looking-glass" $targetPrefix
 $state=Invoke-RipeStat "bgp-state" $targetPrefix
 $sourceNeighbours=Invoke-RipeStat "asn-neighbours" $sourceAsn @{lod=1}
-$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn @{lod=1}
+$targetNeighbours=Invoke-RipeStat "asn-neighbours" $targetAsn @{lod=1}`r`n$risPeerings=Invoke-RipeStat "ris-peerings" $targetPrefix
 
-$lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}
+$lgPaths=if($lg.success){Get-LookingGlassPaths $lg.data $sourceAsn $targetAsn}else{@()}`r`n$risPaths=if($risPeerings.success){Get-RisPeeringsPaths $risPeerings.data $sourceAsn $targetAsn}else{@()}`r`n$risDirectPeerings=@($risPaths | Where-Object {([int]$_.peer_asn -eq [int]($sourceAsn -replace "^AS",""))})`r`n$risPathDirect=@($risPaths | Where-Object {$_.direct_adjacency})
 
 $statePaths=@()
 if($state.success){
@@ -131,7 +165,7 @@ $sourceMatch=if($sourceNeighbours.success){Get-NeighbourMatch $sourceNeighbours.
 $targetMatch=if($targetNeighbours.success){Get-NeighbourMatch $targetNeighbours.data.neighbours $sourceAsn}else{$null}
 $pathDirect=(@($lgPaths | Where-Object {$_.direct_adjacency})).Count -gt 0 -or (@($statePaths | Where-Object {$_.direct_adjacency})).Count -gt 0
 $neighbourDirect=($sourceMatch -and $sourceMatch.found) -or ($targetMatch -and $targetMatch.found)
-$anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $targetNeighbours.success
+$anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $targetNeighbours.success -or $risPeerings.success
 
 [pscustomobject]@{
   source="RIPEstat"
@@ -160,15 +194,15 @@ $anySuccess=$lg.success -or $state.success -or $sourceNeighbours.success -or $ta
     target=$sourceMatch
     error=$sourceNeighbours.error
   }
-  target_neighbours=[pscustomobject]@{
+  ris_peerings=[pscustomobject]@{`r`n    success=$risPeerings.success`r`n    uri=$risPeerings.uri`r`n    route_count=$risPaths.Count`r`n    source_peer_route_count=$risDirectPeerings.Count`r`n    direct_path_count=$risPathDirect.Count`r`n    paths=$risPaths`r`n    error=$risPeerings.error`r`n  }`r`n  target_neighbours=[pscustomobject]@{
     success=$targetNeighbours.success
     uri=$targetNeighbours.uri
     source=$targetMatch
     error=$targetNeighbours.error
   }
-  direct_as_adjacency=if($pathDirect -or $neighbourDirect){$true}elseif($anySuccess){$false}else{$null}
-  path_observation_count=($lgPaths.Count + $statePaths.Count)
-  direct_path_observation_count=(@($lgPaths | Where-Object {$_.direct_adjacency}).Count + @($statePaths | Where-Object {$_.direct_adjacency}).Count)
-  status=if($lg.success -and $state.success -and $sourceNeighbours.success -and $targetNeighbours.success){"LOOKUP_OK"}elseif($anySuccess){"PARTIAL"}else{"ERROR"}
-  note="RIPEstat RIS control-plane observations. Looking Glass uses RRC entries/peers; BGP State exposes AS paths. AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
+  direct_as_adjacency=if($pathDirect -or $neighbourDirect -or $risPathDirect.Count -gt 0 -or $risDirectPeerings.Count -gt 0){$true}elseif($anySuccess){$false}else{$null}
+  path_observation_count=($lgPaths.Count + $statePaths.Count + $risPaths.Count)
+  direct_path_observation_count=(@($lgPaths | Where-Object {$_.direct_adjacency}).Count + @($statePaths | Where-Object {$_.direct_adjacency}).Count + $risPathDirect.Count)
+  status=if($lg.success -and $state.success -and $sourceNeighbours.success -and $targetNeighbours.success -and $risPeerings.success){"LOOKUP_OK"}elseif($anySuccess){"PARTIAL"}else{"ERROR"}
+  note="RIPEstat RIS control-plane observations. Looking Glass and BGP State expose AS paths; RIS Peerings exposes collector peer sessions and routes. A source ASN appearing as a RIS peer for the target prefix is evidence of a BGP peering session observed by that RIS collector, but does not prove that the measured data-plane flow used that session or a specific IX."
 }
