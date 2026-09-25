@@ -1,2 +1,2 @@
 param([Parameter(Mandatory)][string]$Operator)
-[pscustomobject]@{direct_peer_proven=$false;specific_ix_path_proven=$false;internet_transit=$null;status="NOT_PROVEN";note="Public measurements do not prove a physical IX or direct peer path."}
+[pscustomobject]@{direct_peer_proven=$null;specific_ix_path_proven=$null;internet_transit=$null;status="NOT_PROVEN";note="Public measurements do not prove a physical IX, direct peer, or Internet transit path."}
