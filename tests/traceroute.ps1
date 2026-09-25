@@ -20,12 +20,12 @@ function Get-IPv4Scope {
 function New-NetworkInfo {
   param(
     [string]$Scope,
-    [string]$Asn,
+    [AllowNull()][object]$Asn,
     [array]$Asns,
-    [string]$Prefix,
+    [AllowNull()][object]$Prefix,
     [string]$Status,
     [string]$Source,
-    [string]$Error
+    [AllowNull()][object]$Error
   )
   [pscustomobject]@{
     scope=$Scope
