@@ -112,14 +112,14 @@
     "target_prefix": "77.105.168.0/22",
     "looking_glass": {
       "success": true,
-      "uri": "https://stat.ripe.net/data/looking-glass/data.json?resource=77.105.168.0%2F22&lod=0",
+      "uri": "https://stat.ripe.net/data/looking-glass/data.json?resource=77.105.168.0%2F22",
       "route_count": 0,
       "paths": null,
       "error": null
     },
     "bgp_state": {
       "success": true,
-      "uri": "https://stat.ripe.net/data/bgp-state/data.json?resource=77.105.168.0%2F22&lod=0",
+      "uri": "https://stat.ripe.net/data/bgp-state/data.json?resource=77.105.168.0%2F22",
       "route_count": 0,
       "paths": [],
       "query_time": null,
@@ -151,7 +151,7 @@
     "path_observation_count": 0,
     "direct_path_observation_count": 0,
     "status": "LOOKUP_OK",
-    "note": "RIPEstat provides BGP control-plane observations from RIPE RIS. Looking Glass and BGP State expose observed AS paths; AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
+    "note": "RIPEstat RIS control-plane observations. Looking Glass uses RRC entries/peers; BGP State exposes AS paths. AS adjacency does not prove that the measured data-plane flow used that path or a specific IX."
   },
   "peeringdb": {
     "source": "PeeringDB",
@@ -209,7 +209,7 @@
         "rtt_ms": [
           6,
           4,
-          3
+          4
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -239,9 +239,9 @@
         "hop": 3,
         "ip": "10.226.142.66",
         "rtt_ms": [
-          29,
           28,
-          29
+          44,
+          32
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -257,9 +257,9 @@
         "hop": 4,
         "ip": "10.163.123.75",
         "rtt_ms": [
+          34,
           24,
-          28,
-          29
+          24
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -275,9 +275,9 @@
         "hop": 5,
         "ip": "10.163.123.70",
         "rtt_ms": [
-          31,
-          23,
-          30
+          27,
+          29,
+          29
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -293,9 +293,9 @@
         "hop": 6,
         "ip": "10.163.122.181",
         "rtt_ms": [
-          32,
-          25,
-          33
+          28,
+          29,
+          31
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -311,9 +311,9 @@
         "hop": 7,
         "ip": "10.153.254.114",
         "rtt_ms": [
-          23,
-          29,
-          29
+          48,
+          28,
+          24
         ],
         "status": "REPLIED",
         "scope": "RFC1918",
@@ -329,9 +329,9 @@
         "hop": 8,
         "ip": "109.239.137.217",
         "rtt_ms": [
-          37,
-          47,
-          39
+          36,
+          40,
+          33
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -347,9 +347,9 @@
         "hop": 9,
         "ip": "92.53.94.99",
         "rtt_ms": [
-          36,
-          48,
-          38
+          34,
+          40,
+          39
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
@@ -367,9 +367,9 @@
         "hop": 10,
         "ip": "77.105.169.6",
         "rtt_ms": [
-          46,
-          49,
-          44
+          38,
+          38,
+          40
         ],
         "status": "REPLIED",
         "scope": "PUBLIC",
