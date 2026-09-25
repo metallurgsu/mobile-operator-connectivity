@@ -9,6 +9,7 @@ $identity=& "$PSScriptRoot/identity.ps1" -Operator $Operator
 $whois=& "$PSScriptRoot/whois.ps1" -Operator $Operator
 $bgp=& "$PSScriptRoot/bgp.ps1" -Operator $Operator
 $bgpTools=& "$PSScriptRoot/bgp-tools.ps1" -Operator $Operator
+$ripeStat=& "$PSScriptRoot/ripestat.ps1" -Operator $Operator
 $peeringDb=& "$PSScriptRoot/peeringdb.ps1" -Operator $Operator
 $routing=& "$PSScriptRoot/routing.ps1" -Operator $Operator
 $trace=& "$PSScriptRoot/traceroute.ps1" -Operator $Operator
@@ -29,6 +30,7 @@ $data=[ordered]@{
  whois=$whois
  bgp=$bgp
  bgp_tools=$bgpTools
+ ripestat=$ripeStat
  peeringdb=$peeringDb
  routing=$routing
  traceroute=$trace
@@ -37,7 +39,7 @@ $data=[ordered]@{
  security=$security
  ix=$ix
  result=[ordered]@{ip_connectivity=$ip;application_connectivity=$app;bgp_reachability=$bgp.reachability;mpls_observed=$routing.mpls_observed;direct_physical_interconnect=$ix.direct_peer_proven;specific_ix_path=$ix.specific_ix_path_proven;internet_transit=$ix.internet_transit;exact_physical_path=$null}
- evidence=@("identity","RDAP/WHOIS","RIPE RIS","bgp.tools","PeeringDB","routing","traceroute","TCP","HTTP")
+ evidence=@("identity","RDAP/WHOIS","RIPE RIS looking-glass","RIPE RIS ASN neighbours","bgp.tools","PeeringDB","routing","traceroute","TCP","HTTP")
 }
 $file="$root/data/$($c.Operator.short_name.ToLower()).json"
 Save-Json $file $data
